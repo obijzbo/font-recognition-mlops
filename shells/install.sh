@@ -32,16 +32,22 @@ install_python_version() {
     sudo apt install -y python${PYTHON_VERSION} python${PYTHON_VERSION}-venv
 }
 
+#install_tesseract_ocr() {
+#  echo "Tesseract Installation ..."
+#  sudo apt update
+#  sudo apt install -y tesseract-ocr
+#}
+
 create_virtual_env() {
     echo "Creating a virtual environment with python${PYTHON_VERSION}"
     python${PYTHON_VERSION} -m venv ${ENV_NAME}
     source ${ENV_NAME}/bin/activate
 
     # Install packages from requirements.txt
-    if [ -f "requirements.txt" ]; then
+    if [ -f "preprocessing_req.txt" ]; then
         echo "Installing packages from requirements.txt..."
-        pip install --upgrade pip
-        pip install -r requirements.txt
+        pip3 install --upgrade pip
+        pip3 install -r preprocessing_req.txt
     else
         echo "requirements.txt not found. Skipping package installation."
     fi
