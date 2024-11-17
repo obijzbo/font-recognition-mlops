@@ -1,10 +1,9 @@
 import os
 from dotenv import load_dotenv
 from utils import process_dataset
-from utils import bw_conversion
-from utils import detect_edges
 from utils import segment_fonts
 from utils import resize_with_padding
+from utils import remove_black_images_in_dir
 from utils import analyze_dataset
 
 
@@ -38,11 +37,11 @@ print(f"Clean Data Path: {CLEAN_DATA_PATH}")
 print(f"Log Path: {LOG_PATH}")
 
 if __name__ == "__main__":
-    print("========================START========================")
-    print(f"Analyze raw dataset: {RAW_DATA_PATH}")
-    analyze_dataset(RAW_DATA_PATH, LOG_PATH)
-    print("=========================END=========================")
-
+    # print("========================START========================")
+    # print(f"Analyze raw dataset: {RAW_DATA_PATH}")
+    # analyze_dataset(RAW_DATA_PATH, LOG_PATH)
+    # print("=========================END=========================")
+    #
     print("========================START========================")
     print(f"Processing images from: {RAW_DATA_PATH}")
     print(f"Saving processed images to: {GS_DATA_PATH}")
@@ -52,40 +51,26 @@ if __name__ == "__main__":
 
     print("========================START========================")
     print(f"Processing images from: {GS_DATA_PATH}")
-    print(f"Saving processed images to: {BW_DATA_PATH}")
-    bw_conversion(input_dir=GS_DATA_PATH, output_dir=BW_DATA_PATH)
-    print("Text converted to black complete!")
-    print("=========================END=========================")
-
-    print("========================START========================")
-    print(f"Processing images from: {BW_DATA_PATH}")
-    print(f"Saving processed images to: {EDGE_DATA_PATH}")
-    detect_edges(input_dir=BW_DATA_PATH, output_dir=EDGE_DATA_PATH)
-    print("Edge detection complete!")
-    print("=========================END=========================")
-
-    print("========================START========================")
-    print(f"Processing images from: {BW_DATA_PATH}")
     print(f"Saving processed images to: {SEGMENTED_FONT_DATA_PATH}")
-    segment_fonts(input_dir=BW_DATA_PATH, output_dir=SEGMENTED_FONT_DATA_PATH)
+    segment_fonts(input_dir=GS_DATA_PATH, output_dir=SEGMENTED_FONT_DATA_PATH)
     print("Font segmentation complete!")
     print("=========================END=========================")
 
     print("========================START========================")
     print(f"Processing images from: {SEGMENTED_FONT_DATA_PATH}")
     print(f"Saving processed images to: {RESIZE_DATA_PATH}")
-    resize_with_padding(input_dir=SEGMENTED_FONT_DATA_PATH, output_dir=RESIZE_DATA_PATH, target_size=TARGET_SIZE)
+    resize_with_padding(SEGMENTED_FONT_DATA_PATH, RESIZE_DATA_PATH, target_size=TARGET_SIZE)
     print("Resize with padding complete!")
     print("=========================END=========================")
 
     print("========================START========================")
     print(f"Processing images from: {RESIZE_DATA_PATH}")
     print(f"Saving processed images to: {CLEAN_DATA_PATH}")
-    bw_conversion(input_dir=RESIZE_DATA_PATH, output_dir=CLEAN_DATA_PATH)
-    print("Data cleaning complete!")
+    process_dataset(input_dir=RESIZE_DATA_PATH, output_dir=CLEAN_DATA_PATH)
+    print("Text converted to white complete!")
     print("=========================END=========================")
-
-    print("========================START========================")
-    print(f"Analyze clean dataset: {CLEAN_DATA_PATH}")
-    analyze_dataset(CLEAN_DATA_PATH, LOG_PATH)
-    print("=========================END=========================")
+    #
+    # print("========================START========================")
+    # print(f"Analyze clean dataset: {CLEAN_DATA_PATH}")
+    # analyze_dataset(CLEAN_DATA_PATH, LOG_PATH)
+    # print("=========================END=========================")
