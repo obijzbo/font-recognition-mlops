@@ -9,6 +9,7 @@ import datetime
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import json
+import numpy as np
 
 
 def split_dataset(cleaned_data_path, train_data_path, test_data_path, split_ratio=0.8):
@@ -302,15 +303,15 @@ def train_font_classification_model(data_path, model_path, log_path, initial_epo
 
 def evaluate_model_on_test_data(model_path, test_data_path, log_path):
     """
-    Evaluate a saved model on test data and save evaluation metrics to a log file.
+    Evaluate a saved model on test data, save evaluation metrics, and plot a confusion matrix.
 
     Parameters:
     - model_path (str): Path to the saved model file.
     - test_data_path (str): Path to the directory containing the test dataset.
-    - log_path (str): Path to save the evaluation log file.
+    - log_path (str): Path to save evaluation log file and confusion matrix.
 
     Returns:
-    - None
+    - evaluation_results (dict): Dictionary containing evaluation metrics and confusion matrix data.
     """
     # Load the model
     model = load_model(model_path)
@@ -340,21 +341,41 @@ def evaluate_model_on_test_data(model_path, test_data_path, log_path):
     test_ds = test_ds.map(lambda x, y: (normalization_layer(x), y))
     test_ds = test_ds.prefetch(buffer_size=tf.data.AUTOTUNE)
 
+    # Get true labels and predictions
+    y_true = np.concatenate([y.numpy() for _, y in test_ds])
+    y_pred = np.argmax(model.predict(test_ds), axis=-1)
+
     # Evaluate the model on the test dataset
     loss, accuracy = model.evaluate(test_ds)
     print(f"Test Loss: {loss}")
     print(f"Test Accuracy: {accuracy}")
 
-    # Save evaluation metrics to log file
+    # Generate the confusion matrix
+    conf_matrix = confusion_matrix(y_true, y_pred)
+    if class_names:
+        disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels=class_names)
+    else:
+        disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix)
+
+    # Plot the confusion matrix
+    disp.plot(cmap=plt.cm.Blues, xticks_rotation='vertical')
+    confusion_matrix_path = os.path.join(log_path, "confusion_matrix.png")
+    plt.savefig(confusion_matrix_path)
+    plt.close()
+    print(f"Confusion matrix saved to '{confusion_matrix_path}'.")
+
+    # Save evaluation metrics and confusion matrix data
     evaluation_results = {
         "test_loss": loss,
-        "test_accuracy": accuracy
+        "test_accuracy": accuracy,
+        "confusion_matrix": conf_matrix.tolist()
     }
     if class_names:
         evaluation_results["class_names"] = class_names
-    log_file = f"{log_path}/evaluate_report.log"
+
+    log_file = os.path.join(log_path, "evaluate_report.json")
     with open(log_file, "w") as log_file:
         json.dump(evaluation_results, log_file, indent=4)
-    print(f"Evaluation results saved to '{log_path}'.")
+    print(f"Evaluation results saved to '{log_file}'.")
 
     return evaluation_results
