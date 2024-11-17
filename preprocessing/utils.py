@@ -2,6 +2,7 @@ import os
 import cv2
 import matplotlib.pyplot as plt
 from collections import defaultdict
+import numpy as np
 from PIL import Image
 from tqdm import tqdm
 
@@ -48,64 +49,11 @@ def process_dataset(input_dir, output_dir):
                     print(f"Error processing {input_path}: {e}")
 
 
-def ensure_directory_exists(path):
-    """Ensure that a directory exists."""
-    if not os.path.exists(path):
-        os.makedirs(path)
-
-
-def invert_colors(image):
-    """Invert colors of an image."""
-    return cv2.bitwise_not(image)
-
-
-def bw_conversion(input_dir, output_dir):
-    """Invert colors for all images in a directory and save to a new location."""
-    for root, dirs, files in os.walk(input_dir):
-        for file in tqdm(files, desc=f"Processing {root}"):
-            if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
-                input_path = os.path.join(root, file)
-                relative_path = os.path.relpath(root, input_dir)
-                output_folder = os.path.join(output_dir, relative_path)
-                os.makedirs(output_folder, exist_ok=True)
-
-                output_path = os.path.join(output_folder, file)
-                try:
-                    # Read image and invert colors
-                    image = cv2.imread(input_path, cv2.IMREAD_GRAYSCALE)
-                    inverted_image = invert_colors(image)
-
-                    # Save the inverted image
-                    cv2.imwrite(output_path, inverted_image)
-                except Exception as e:
-                    print(f"Error processing {input_path}: {e}")
-
-
-def detect_edges(input_dir, output_dir):
-    """Apply edge detection on images."""
-    os.makedirs(output_dir, exist_ok=True)
-    for root, dirs, files in os.walk(input_dir):
-        for file in tqdm(files, desc=f"Processing {root}"):
-            if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
-                input_path = os.path.join(root, file)
-                relative_path = os.path.relpath(root, input_dir)
-                output_folder = os.path.join(output_dir, relative_path)
-                os.makedirs(output_folder, exist_ok=True)
-                output_path = os.path.join(output_folder, file)
-
-                try:
-                    image = cv2.imread(input_path, cv2.IMREAD_GRAYSCALE)
-                    edges = cv2.Canny(image, 50, 150)
-                    cv2.imwrite(output_path, edges)
-                except Exception as e:
-                    print(f"Error processing {input_path}: {e}")
-
-
 def segment_fonts(input_dir, output_dir):
     """Segment words from images and save them in their labeled directories."""
     for root, dirs, files in os.walk(input_dir):
         for file in tqdm(files, desc=f"Processing {root}"):
-            if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
+            if file.lower().endswith(('.png', '.jpg', '.jpeg')):
                 input_path = os.path.join(root, file)
 
                 relative_path = os.path.relpath(root, input_dir)
@@ -122,7 +70,7 @@ def segment_fonts(input_dir, output_dir):
                         x, y, w, h = cv2.boundingRect(contour)
                         segmented_word = binary_image[y:y + h, x:x + w]
 
-                        word_file_name = f"{os.path.splitext(file)[0]}_word_{i}.png"
+                        word_file_name = f"{os.path.splitext(file)[0]}_font_{i}.png"
                         word_output_path = os.path.join(output_folder, word_file_name)
                         cv2.imwrite(word_output_path, segmented_word)
                 except Exception as e:
@@ -319,3 +267,40 @@ def analyze_dataset(dataset_path, log_dir_path):
 
     print(f"Analysis log saved to: {log_dir_path}")
     print(f"Plots saved to: {log_dir_path}")
+
+
+def remove_black_images_in_dir(input_dir, black_threshold=0.6):
+    """
+    Remove images in the given directory (and subdirectories) if more than
+    `black_threshold` (default 80%) of the pixels are black.
+
+    Args:
+    - input_dir (str): Path to the directory containing label subdirectories.
+    - black_threshold (float): The threshold for black pixel percentage (default 0.8 for 80%).
+    """
+    # Walk through the directory
+    for root, dirs, files in os.walk(input_dir):
+        for file in files:
+            if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
+                image_path = os.path.join(root, file)
+
+                # Read the image in grayscale
+                image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+
+                # Check if the image is loaded correctly
+                if image is None:
+                    continue
+
+                # Calculate the total number of pixels in the image
+                total_pixels = image.size
+
+                # Count the number of black pixels (pixels with value 0)
+                black_pixels = np.sum(image == 0)
+
+                # Calculate the percentage of black pixels
+                black_percentage = black_pixels / total_pixels
+
+                # If black pixels exceed the threshold, remove the image
+                if black_percentage > black_threshold:
+                    print(f"Removing {image_path} due to {black_percentage * 100:.2f}% black pixels.")
+                    os.remove(image_path)
