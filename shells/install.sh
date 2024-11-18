@@ -63,4 +63,6 @@ fi
 
 create_virtual_env
 
+sudo apt-get install jq -y
+
 echo "Setup complete!!!"

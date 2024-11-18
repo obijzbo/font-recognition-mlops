@@ -34,12 +34,12 @@ if __name__ == "__main__":
     print("=====================Versioning=====================")
     version_num = track_version(VERSION_DIR)
     print(version_num)
-    # current_version_dir = f"version_{version_num}"
-    # CURRENT_VERSION_PATH = os.path.join(VERSION_DIR, current_version_dir)
-    # create_directory_if_not_exists(CURRENT_VERSION_PATH)
-    # print(f"=====================Version {version_num}=====================")
+    current_version_dir = f"version_{version_num}"
+    CURRENT_VERSION_PATH = os.path.join(VERSION_DIR, current_version_dir)
+    create_directory_if_not_exists(CURRENT_VERSION_PATH)
+    print(f"=====================Version {version_num}=====================")
 
-    CURRENT_VERSION_PATH = '/home/mtlls1/Projects/font-recognition-mlops/versions/version_3'
+    # CURRENT_VERSION_PATH = '/home/mtlls1/Projects/font-recognition-mlops/versions/version_3'
 
     RAW_DATA_PATH = os.getenv("RAW_DATA_PATH")
     GS_DATA_PATH = os.path.join(CURRENT_VERSION_PATH, os.getenv("GS_DATA", "").strip())
