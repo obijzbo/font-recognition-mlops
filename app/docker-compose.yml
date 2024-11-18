@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${FASTAPI_PORT}:${APP_PORT}"  # Expose the port defined in .env file
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+      - APP_HOST=${FASTAPI_HOST}
+      - APP_PORT=${FASTAPI_PORT}
+    volumes:
+      - ${MODEL_PATH}:/app
+      - ${CLASS_LABEL}:/app
+      - .:/app
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["celery", "-A", "celery_worker", "worker", "--loglevel=info"]
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+    volumes:
+#      - ${MODEL_PATH}:/app
+#      - ${CLASS_LABEL}:/app
+      - .:/app
+
+  redis:
+    image: redis:6.2
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"  # Expose Redis port
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
