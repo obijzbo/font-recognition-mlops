@@ -37,11 +37,11 @@ print(f"Clean Data Path: {CLEAN_DATA_PATH}")
 print(f"Log Path: {LOG_PATH}")
 
 if __name__ == "__main__":
-    # print("========================START========================")
-    # print(f"Analyze raw dataset: {RAW_DATA_PATH}")
-    # analyze_dataset(RAW_DATA_PATH, LOG_PATH)
-    # print("=========================END=========================")
-    #
+    print("========================START========================")
+    print(f"Analyze raw dataset: {RAW_DATA_PATH}")
+    analyze_dataset(RAW_DATA_PATH, LOG_PATH)
+    print("=========================END=========================")
+
     print("========================START========================")
     print(f"Processing images from: {RAW_DATA_PATH}")
     print(f"Saving processed images to: {GS_DATA_PATH}")
@@ -69,8 +69,8 @@ if __name__ == "__main__":
     process_dataset(input_dir=RESIZE_DATA_PATH, output_dir=CLEAN_DATA_PATH)
     print("Text converted to white complete!")
     print("=========================END=========================")
-    #
-    # print("========================START========================")
-    # print(f"Analyze clean dataset: {CLEAN_DATA_PATH}")
-    # analyze_dataset(CLEAN_DATA_PATH, LOG_PATH)
-    # print("=========================END=========================")
+
+    print("========================START========================")
+    print(f"Analyze clean dataset: {CLEAN_DATA_PATH}")
+    analyze_dataset(CLEAN_DATA_PATH, LOG_PATH)
+    print("=========================END=========================")
