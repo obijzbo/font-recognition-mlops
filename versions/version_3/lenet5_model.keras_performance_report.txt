@@ -1,0 +1,55 @@
+                                 precision    recall  f1-score   support
+
+          AbyssinicaSIL-Regular       0.20      0.09      0.13       897
+    AdventPro-Italic[wdth,wght]       0.38      0.05      0.09       899
+           AdventPro[wdth,wght]       0.46      0.43      0.44       899
+            Afacad-Italic[wght]       0.25      0.03      0.05       920
+                   Afacad[wght]       0.29      0.10      0.15       930
+                Akronim-Regular       0.88      0.84      0.86      1880
+                      Alef-Bold       0.18      0.09      0.12       901
+                   Alef-Regular       0.09      0.08      0.08       901
+              Aleo-Italic[wght]       0.21      0.04      0.06       898
+                     Aleo[wght]       0.17      0.17      0.17       899
+                  Alice-Regular       0.33      0.17      0.23       888
+                  Alike-Regular       0.38      0.05      0.10       877
+                Allerta-Regular       0.17      0.32      0.22       901
+                  Almendra-Bold       0.51      0.28      0.36       831
+            Almendra-BoldItalic       0.48      0.49      0.49       861
+                Almendra-Italic       0.25      0.46      0.32       883
+               Almendra-Regular       0.24      0.07      0.11       842
+                     Amita-Bold       0.38      0.35      0.37       897
+                  Amita-Regular       0.31      0.08      0.13       920
+          AnekBangla[wdth,wght]       0.16      0.38      0.22       900
+              AnnapurnaSIL-Bold       0.38      0.34      0.36       893
+           AnnapurnaSIL-Regular       0.26      0.22      0.24       894
+                  Anuphan[wght]       0.10      0.04      0.06       901
+      Anybody-Italic[wdth,wght]       0.71      0.08      0.14       897
+             Anybody[wdth,wght]       0.50      0.75      0.60       892
+          AreYouSerious-Regular       0.61      0.41      0.49       711
+                 Armata-Regular       0.21      0.55      0.30       901
+         Asap-Italic[wdth,wght]       0.10      0.03      0.05       899
+                Asap[wdth,wght]       0.09      0.16      0.11       900
+                Assistant[wght]       0.75      0.75      0.75       900
+                      Atma-Bold       0.49      0.60      0.54       888
+                     Atma-Light       0.47      0.70      0.56       894
+                    Atma-Medium       0.19      0.54      0.28       894
+                   Atma-Regular       0.34      0.56      0.42       895
+                  Atma-SemiBold       0.31      0.73      0.44       890
+            AverageSans-Regular       0.12      0.03      0.05       898
+               AveriaLibre-Bold       0.16      0.27      0.20       901
+         AveriaLibre-BoldItalic       0.17      0.03      0.05       901
+             AveriaLibre-Italic       0.12      0.01      0.01       901
+              AveriaLibre-Light       0.08      0.01      0.02       901
+        AveriaLibre-LightItalic       0.23      0.02      0.04       902
+            AveriaLibre-Regular       0.09      0.07      0.08       901
+             BalooBhaina2[wght]       0.09      0.30      0.14       901
+              BalsamiqSans-Bold       0.32      0.42      0.36       896
+        BalsamiqSans-BoldItalic       0.10      0.17      0.12       896
+            BalsamiqSans-Italic       0.37      0.06      0.10       894
+           BalsamiqSans-Regular       0.19      0.43      0.26       896
+      BarlowSemiCondensed-Black       0.41      0.71      0.52       893
+BarlowSemiCondensed-BlackItalic       0.37      0.15      0.22       879
+
+                       accuracy                           0.29     44633
+                      macro avg       0.30      0.28      0.25     44633
+                   weighted avg       0.31      0.29      0.26     44633
